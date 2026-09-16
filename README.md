@@ -2,11 +2,10 @@
 ### *Symmetry-Graded Digit Extraction for Faster BGV/BFV Bootstrapping*
 
 This directory contains a **Lean 4 + Mathlib** formalization of the algebraic core
-of the paper, in the style of the author's earlier formalization of the order-four
-filter (which is included here as the `r = 4` instance).  Every result below is
-proved with **zero `sorry`, zero `admit`, zero user axioms**; `lake build` completes
-with no errors, and `#print axioms` on every main theorem reports only the three
-standard Lean axioms `propext`, `Classical.choice`, `Quot.sound`.
+of the paper; the order-four filter of prior work is included as the `r = 4`
+instance.  Every result below is proved with **zero `sorry`, zero `admit`, zero user
+axioms**; `lake build` completes with no errors, and `#print axioms` on every main
+theorem reports only the three standard Lean axioms `propext`, `Classical.choice`, `Quot.sound`.
 
 ## Build / reproduce
 
@@ -47,6 +46,10 @@ kernel up.
 | `SymmetryGraded/PSCount.lean` | (round 4) **Paterson–Stockmeyer counts**: `PS(m) = (k−2)+⌈log₂g⌉+(g−1) ≤ 2√m + log₂(√m+2) + 1`, the factored count `C_r = chain + PS(deg Q) + 1` (`4` at `r = 6`), the **effective order** `ρ = r|T|/|Ω|` with `2√(deg Q) ≤ 2√(|T|/ρ)`, the box-closure value `ρ = 4 + 2/(6B²+6B+1)`, and the phase sum of Prop. "Cost of ComposedEval" as an identity tied to the `Noise.lean` program count |
 | `SymmetryGraded/LatticeMin.lean` | (round 4) **Injectivity as a lattice minimum**, second equivalence: `T − T = 2T` for the box and the hexagon, `φ_A` injective on `T_B` ⟺ `N_T(w) > 2B` on `L_A ∖ {0}`; the Gaussian bound (`A² ≡ −1`: `p ∣ u²+v²`, `‖w‖∞ ≥ √(p/2)`, so `8B² < p` suffices, `c₄ = 8`) and the Eisenstein bound (`A² ≡ A−1`: `p ∣ u²+uv+v²`, `u²+uv+v² ≤ N(w)²`, `N(w) ≥ √p`, so `4B² < p` suffices, `c₆ = 4`); (round 5) the **upper bounds**: a kernel vector of norm exactly `p` (Fermat for `ℤ[i]`; a self-contained Thue/pigeonhole argument for `ℤ[ω]`), hence `√(p/2) ≤ λ₁^∞ ≤ √p`, `√p ≤ λ₁^hex ≤ (2/√3)√p`, and the necessary conditions `4B² < p` (box), `3B² < p` (hexagon): `4 ≤ c₄ ≤ 8`, `3 ≤ c₆ ≤ 4` |
 | `SymmetryGraded/Unify.lean` | (round 3) **prior evaluators as corners**: the three-branch `(r,d)`-graded cost `gcost`, the five corner identities, interior branch `= Cost.cost`, **cost monotonicity** with the saturated-branch tie and the downward jump `2 + log₂ d > log₂ d` at `D/r = d` |
+| `SymmetryGraded/Closure.lean` | **feasibility of the order-six filter on the closure of the box**: the difference set is computed exactly, `Ω_B − Ω_B = Ω_{2B} ∪ T_{3B}`; the Eisenstein norm on it is `≤ 12B²`, attained at `(2B, 2B)`; hence `12B² < p ⟹ φ_A` injective on `Ω_B` (**the constant `12`, on the sufficient side, with a sharpness witness**), and conversely injectivity forces `27B² + 18B + 3 ≤ 4p` (`27/4 ≤ c_Ω ≤ 12`) |
+| `SymmetryGraded/Conjugacy.lean` | **rank-two Latimer–MacDuffee**: every integral binary quadratic form of discriminant `−4 ≤ D < 0` represents `±1` (explicit reduction, replacing class number one for `ℤ[i]`, `ℤ[ω]`); `M² = τ·M − I` with `τ² < 4` forces `tr M = τ`, `det M = 1`, and makes `M` `GL₂(ℤ)`-conjugate to the companion matrix; any two such matrices are conjugate; the instances `M² = −I` (`r = 4`), `M² = M − I` (`r = 6`) and the conjugacy of every finite-order rotation to `M_A` |
+| `SymmetryGraded/Monodromy.lean` | **the deterministic part of the monodromy theorem and the isolated Chebotarev input**: the pencil `F_c = Γ + cQ` (monic of constant degree `n'`), (H1) ⟹ no fixed divisor and pairwise coprimality of distinct members, (H1) ⟹ `Γ + uQ` irreducible over `F_p(u)` (via `Polynomial.Bivariate.swap` and Gauss's lemma), (H1)–(H4) as a `structure Hyp` with the discriminant supplied as data, the branch locus of size `≤ 2n' − 2` and squarefreeness off it, the density constant `Π_d(n')` as a proportion of permutations with all cycle lengths divisible by `d` and `Π_d(n') > 0` for `d ∣ n'`, and the Chebotarev bound as a `structure ChebotarevBound` (an explicit hypothesis, never an axiom) from which existence of a norm form in the pencil is derived |
+| `SymmetryGraded/Hensel.lean` | **the Hensel lift of the norm criterion to the Galois ring `GR(p^e, d)`, `e > 1`**: lifting of a coprime factorisation modulo a nilpotent ideal (a Newton iteration; Mathlib's `Henselian.lean` lifts only roots), the linear case via Mathlib's Newton/Hensel root lifting together with pairwise-coprime conjugate roots, and the **orbit form**: if `F` is monic with base-ring coefficients and `F ≡ Orb_d(C₀)` modulo the nilpotent ideal with the `d` conjugates of `C₀` pairwise coprime, then `C₀` lifts to a monic `C` with `F = Orb_d(C)` exactly |
 
 ## Modelling conventions
 
@@ -452,6 +455,65 @@ Two layers.  Abstract: `K, L` fields, `[Algebra K L] [FiniteDimensional K L] [Is
 | (round 5) `A² ≡ A − 1`, `p` prime: `p` odd; `u² + uv + v² ≢ 2 (mod 4)`; `⌊√p⌋² < p`; pigeonhole on `{0..⌊√p⌋}²` gives a nonzero kernel vector with `\|u\|,\|v\| ≤ ⌊√p⌋`; hence one with `u² + uv + v² = p` (Thue) | `odd_of_dvd_eisenstein`, `eisenstein_ne_two_mul_odd`, `sqrt_sq_lt_of_prime`, `exists_kernel_small`, `exists_kernel_eisenstein_eq` |
 | (round 5) `u² + uv + v² = p ⟹ 3N(w)² ≤ 4p`; **Lemma (Injective packing), hexagon**: `√p ≤ λ₁^hex ≤ (2/√3)√p`; injective on `T_B` ⟹ `3B² < p`; `3 ≤ c₆ ≤ 4` | `three_mul_hexNorm_sq_le`, `exists_kernel_hexNorm_le`, `lambda1_hex_bounds`, `hex_injective_imp`, `hex_constants` |
 
+### `Closure.lean`  (namespace `Closure`) — Theorem "Feasibility" on the box closure, the constant `12`
+
+`Ω_B = DigitLattice.closure B` is the hexagonal closure of the box under the order-six turn (`|Ω_B| = 6B²+6B+1`, `Lattice.card_closure`); `T_R = hex R` is the hexagon `{N ≤ R}`; the `ZMod` statements take `A : ℤ`, `p : ℕ` prime, `0 ≤ B`, `p ∣ A² − A + 1`.
+
+| paper statement | Lean name |
+|---|---|
+| the turn is additive, and `Ω_B − Ω_B` is turn-stable | `rot_sub`, `rotInv_sub`, `closure_rotInv_iff`, `sub_rot_iff` |
+| `Ω_{2B} ⊆ Ω_B − Ω_B` (each of the three box images is a difference inside `Ω_B`) | `box_subset_sub`, `closure_subset_sub` |
+| `T_{3B} ⊆ Ω_B − Ω_B` (explicit clamp decompositions; in `T_{3B}` one of `\|η\|`, `\|λ\|`, `\|η+λ\|` is `≤ 2B`) | `hex_base`, `hex_subset_sub` |
+| **the difference set exactly**: `Ω_B − Ω_B = Ω_{2B} ∪ T_{3B}` | `sub_subset`, `closure_sub_closure` |
+| `\|X\|,\|Y\| ≤ C ⟹ X² + XY + Y² ≤ 3C²`; hence the Eisenstein norm is `≤ 12B²` on `Ω_{2B}`, and on all of `Ω_B − Ω_B` | `quad_le`, `eisenstein_le_twelve`, `eisenstein_le_of_mem_sub` |
+| **Thm (Feasibility), box closure, `c_Ω = 12` (sufficient side)**: `12B² < p ⟹ φ_A` injective on `Ω_B` | `closure_injective_of_lt` |
+| the constant `12` is attained at `(2B, 2B) ∈ Ω_B − Ω_B`, so the bound cannot be lowered | `twelve_sharp` |
+| **necessary side**: injective on `Ω_B` `⟹ 27B² + 18B + 3 ≤ 4p`; two-sided `27/4 ≤ c_Ω ≤ 12` | `closure_injective_imp`, `closure_constants` |
+
+### `Conjugacy.lean`  (namespace `Conjugacy`) — Latimer–MacDuffee in rank two
+
+`M2 = Matrix (Fin 2) (Fin 2) ℤ`; `comp τ = [[0,−1],[1,τ]]`; `DigitLattice.MA τ = [[τ,1],[−1,0]]`.  The relevant `τ` are `−1, 0, 1`, i.e. `Φ₃, Φ₄, Φ₆`, all with `τ² < 4`.
+
+| paper statement | Lean name |
+|---|---|
+| the form `v ↦ det[v \| Mv]` and its discriminant; a form of negative discriminant has `A ≠ 0`; the middle coefficient reduces to `\|B'\| ≤ \|A\|` | `qform`, `leading_ne_zero`, `exists_reduced_middle` |
+| **class number one, rank two**: every integral binary quadratic form with `−4 ≤ B² − 4AC < 0` represents `1` or `−1` (descent on `\|A\|`, replacing the class-number-one input for `ℤ[i]` and `ℤ[ω]`) | `exists_repr_aux`, `exists_repr` |
+| `M² = τ·M − I` ⟹ the four entry equations, `tr M = τ` and `det M = 1` (so `χ_M = Φ_r`) | `entries`, `trace_det_of_sq` |
+| **Latimer–MacDuffee, rank two**: `M² = τ·M − I`, `τ² < 4` ⟹ `M` is `GL₂(ℤ)`-conjugate to the companion matrix; any two such matrices are conjugate (a single class) | `exists_conj_comp`, `conj_of_sq_eq` |
+| the companion matrix `M_A` satisfies the same equation; conjugacy to `M_A`; a finite-order rotation `M ≠ ±I`, `det M = 1` has `tr M ∈ {−1,0,1}` and is conjugate to `M_A` | `MA_sq`, `exists_conj_MA`, `trace_mem_of_rotation`, `conj_MA_of_pow_eq_one` |
+| the two instances used: `M² = −I` conjugate to `[[0,−1],[1,0]]` (`r = 4`), `M² = M − I` conjugate to `[[0,−1],[1,1]]` (`r = 6`) | `conj_neg_one`, `conj_eisenstein` |
+
+### `Monodromy.lean`  (namespace `Monodromy`) — Theorem "Full monodromy of the folded pencil", deterministic part
+
+`pencil Γ Q c = Γ + c·Q`; `bipencil Γ Q = Γ + u·Q` as an element of `F[Y][u]`.  The monodromy computation itself (Riemann–Hurwitz, the tame fundamental group, `G = S_{n'}`) and the Chebotarev density theorem are **not** formalized; (H1)–(H4) are the fields of `Hyp`, and the density statement is the field `count_ge` of `ChebotarevBound`.
+
+| paper statement | Lean name |
+|---|---|
+| every member of the pencil is monic of degree `n'`, nonzero; `F_{c₁} − F_{c₂} = (c₁−c₂)Q` | `pencil_monic`, `pencil_natDegree`, `pencil_ne_zero`, `pencil_sub_pencil` |
+| **(H1) ⟹ no fixed divisor**: distinct members have no common nonunit divisor, and are coprime | `isUnit_of_dvd_pencil_of_dvd_Q`, `isUnit_of_dvd_pencil`, `isCoprime_pencil` |
+| **Transitivity**: `Γ + uQ` has degree one in `u` and is primitive, hence irreducible in `F[Y][u]`; read in `Y` it is monic over `F[u]`; by Gauss it is irreducible over `F(u)` | `bipencil_isPrimitive`, `bipencil_irreducible`, `swap_bipencil`, `swap_bipencil_monic`, `generic_irreducible` |
+| (H1)–(H4) as hypotheses, with `Δ(u) = disc_Y(Γ + uQ)` supplied as data (the paper verifies it per instance) | `Hyp` and its fields `monic`, `degQ`, `h1`, `h2`, `h3`, `Δ`, `h4_ne`, `h4_deg`, `h4_sqf`, `h4_branch` |
+| the branch locus has at most `2n' − 2` points; off it the fibre is squarefree | `Hyp.mem_branch`, `branch_card_le`, `squarefree_pencil_of_notMem` |
+| `Π_d(n')` = proportion of permutations of `n'` letters all of whose cycle lengths are divisible by `d`; `Π_d(n') > 0` for `d ∣ n'`; `Π_d(n') ≤ 1` | `fullCycleType`, `sum_fullCycleType`, `cycleDivisible`, `Pi`, `Pi_pos`, `Pi_le_one` |
+| `F_c` is a norm form over `F_{p^d}` (the left side of `NormCriterion.normForm_iff_galoisField`); for a squarefree member given in factored form this is `∀ i, d ∣ deg hᵢ` | `IsNormForm`, `normFormFinset`, `mem_normFormFinset`, `isNormForm_iff_of_factors` |
+| **Cor (Chebotarev density)**, as an explicit hypothesis `#{c} ≥ Π_d(n')·p − err·√p`, and the consequence: a norm form exists in the pencil once `err·√p < Π_d(n')·p` | `ChebotarevBound`, `exists_normForm_of_density` |
+
+### `Hensel.lean`  (namespace `HenselLift`) — Lemma "Norm criterion" over `GR(p^e, d)`, `e > 1`
+
+`S` is an arbitrary commutative ring with a ring automorphism `σ` and a nilpotent ideal `J`; the Galois ring `GR(p^e, d)` is the instance `J = (p)`, `p^e = 0`, `σ = Frob`, `S/J = F_{p^d}`.  `GR(p^e, d)` itself is **not** constructed.
+
+| paper statement | Lean name |
+|---|---|
+| pairwise coprime conjugate roots: if `F(a i) = 0` and the `a i − a j` are units, then `∏ (Y − a i) ∣ F` | `prod_X_sub_C_dvd` |
+| iterated-Frobenius bookkeeping: `(mapRingHom f)^i (Y − α) = Y − f^i α`; a `σ`-fixed `F` is fixed by every `σ^i` | `map_pow_X_sub_C`, `map_pow_eq_self`, `coe_pow_apply`, `mapRingHom_pow_apply` |
+| uniqueness of the Hensel lift of a simple approximate root | `eq_of_isNilpotent_sub_of_isRoot` |
+| **linear case**: `F` monic of degree `d` with base-ring coefficients, `F(α₀)` nilpotent, `F'(α₀)` a unit, the `σⁱ α₀` pairwise separated ⟹ `F = Orb_d(Y − α)` for a root `α ≡ α₀` | `eq_orbProd_of_isNilpotent` |
+| the same over a local ring with nilpotent maximal ideal, and the Galois-ring instance `m = (p)`, `p^e = 0` | `eq_orbProd_of_local`, `isNilpotent_of_mem_span_singleton`, `eq_orbProd_of_maximalIdeal_eq_span` |
+| the ideal of polynomials with all coefficients in `I`, its behaviour under `·`, `%ₘ`, `/ₘ` | `mem_mapC_iff_map_eq_zero`, `mapC_mul_mem`, `mapC_modByMonic`, `mapC_divByMonic`, `mapC_pow_mem` |
+| one Newton step for a factorisation, and its iteration: **lifting a coprime factorisation modulo a nilpotent ideal** (`J^N = 0`, `F ≡ g·h`, reductions of `g`, `h` coprime ⟹ `F = g'h'` exactly) | `exists_step`, `exists_lift_aux`, `exists_lift_of_isCoprime` |
+| coprimality lifts along a nilpotent ideal | `isCoprime_of_isCoprime_map_quotient`, `pow_apply_mem` |
+| **the criterion over `GR(p^e, d)`, general `C`**: `F ≡ Orb_d(C₀)` mod `J` with the `d` conjugates of `C₀` pairwise coprime mod `J` ⟹ a monic `C ≡ C₀` with `F = Orb_d(C)` | `eq_orbProd_of_lift` |
+
 ## Exact hypotheses (summary)
 
 * Order six (`OrderSix`): `A ^ 2 = A - 1` in a field `K` with `(2 : K) ≠ 0` and
@@ -507,42 +569,74 @@ Two layers.  Abstract: `K, L` fields, `[Algebra K L] [FiniteDimensional K L] [Is
   `2 ≤ k`, `2 ≤ g`; the power chain is defined for `r ∈ {4, 6}` (`r = 4` selects `chain4`,
   every other `r` selects `chain6`); noise-bound lemmas take nonnegativity of the input
   noises and norms as hypotheses.
+* Box closure (`Closure`): no hypothesis on `B` for the difference set `Ω_B − Ω_B = Ω_{2B} ∪ T_{3B}`
+  and for `eisenstein_le_twelve`; `0 ≤ B` for the norm bound on the difference set and for the
+  feasibility statements; `p ∣ A² − A + 1` and `12B² < p` for the sufficient side; `p` prime for
+  the necessary side.
+* Conjugacy (`Conjugacy`): the quadratic-form theorem needs only `−4 ≤ D < 0` for the
+  discriminant `D = B² − 4AC`; the matrix theorems need `M * M = τ • M − 1` and `τ ^ 2 < 4`
+  (i.e. `τ ∈ {−1, 0, 1}`, the traces of `Φ₃`, `Φ₄`, `Φ₆`); `conj_MA_of_pow_eq_one` additionally
+  takes `M ^ r = 1` with `1 ≤ r`, `det M = 1`, `M ≠ 1`, `M ≠ −1`.
+* Monodromy (`Monodromy`): `[Field F]` throughout; `Γ` monic with `deg Q < deg Γ` and
+  (H1) `IsCoprime Q Γ` for the pencil and irreducibility statements (`Q ≠ 0` where stated);
+  (H2)–(H4) are only used through the fields of `Hyp`, and the discriminant `Δ` is data, not
+  computed; the density corollary takes a `ChebotarevBound` and the largeness hypothesis
+  `err·√p < Π_d(n')·p`; the bridge to the norm criterion takes the factorisation of the member
+  into pairwise distinct monic irreducibles as a hypothesis.
 
 ## Not formalized / weakened
 
-After round 5 the list of statements of the paper that are **not** machine-checked is:
+The list of statements of the paper that are **not** machine-checked is:
 
-* **Chebotarev density / monodromy** (the success probability `Π_d(n')` of the coset
-  search and the random-matrix heuristics): out of scope by directive.
-* **Latimer–MacDuffee / `GL₂(ℤ)`-conjugacy** of intertwiners to `M_A` (class number one):
-  out of scope by directive.  The order and trace/determinant classification, the
-  admissible orders `{1,2,3,4,6}` and their converse are complete
-  (`Crystallographic.lean`, `RadixCeiling.lean`).
-* **The numerical closure constant `12`** for the box closure: computed, not proved, in
-  the paper; the sufficient sides `c₄ = 8`, `c₆ = 4` and (round 5) the necessary sides
-  `4B² < p`, `3B² < p` are proved, so `4 ≤ c₄ ≤ 8` and `3 ≤ c₆ ≤ 4` (`LatticeMin.lean`).
+* **Chebotarev density, and the monodromy computation itself.**  That the geometric and the
+  arithmetic monodromy group of `ψ = −Γ/Q` are both `S_{n'}` (proved in the paper by
+  Riemann--Hurwitz plus the generation of the tame fundamental group by local monodromies),
+  and the Chebotarev density theorem for `F_p(u)`, are out of reach of Mathlib.  Everything
+  *deterministic* around them is proved in `Monodromy.lean`: the pencil and its constant
+  degree, (H1) ⟹ no fixed divisor and pairwise coprimality of distinct members, (H1) ⟹ the
+  transitivity step (`Γ + uQ` is irreducible over `F_p(u)`), (H1)--(H4) as an explicit
+  hypothesis bundle with the discriminant supplied as data, the branch locus of size
+  `≤ 2n' − 2` and squarefreeness off it, and `Π_d(n') > 0` for `d ∣ n'`.  The density
+  statement itself enters as **one named hypothesis** (`ChebotarevBound.count_ge`), from which
+  the paper's corollary — a norm form exists in the pencil over a large enough field — is
+  derived (`exists_normForm_of_density`).  There is **no `axiom` declaration anywhere** in the
+  development.
+* **The exact lattice-minimum constants.**  Proved: `8B² < p ⟹` injective on the box `⟹ 4B² < p`
+  (`4 ≤ c₄ ≤ 8`); `4B² < p ⟹` injective on the hexagon `⟹ 3B² < p` (`3 ≤ c₆ ≤ 4`); and, on the
+  box closure, `12B² < p ⟹` injective on `Ω_B` `⟹ 27B² + 18B + 3 ≤ 4p` (`27/4 ≤ c_Ω ≤ 12`).
+  The closure constant `12` is therefore proved **exactly on the sufficient side** — improving
+  the `16B²` of the appendix — and `Closure.twelve_sharp` exhibits `(2B, 2B) ∈ Ω_B − Ω_B` of
+  Eisenstein norm exactly `12B²`, so no smaller constant works.  What is not proved is that the
+  *worst case over primes* really sits at `≈ c·B²` for these `c`, i.e. the paper's statement
+  that the thresholds are attained; that is a statement about the distribution of the shortest
+  vectors of the ideals `(p, A − i)` and `(p, A − ω)`, verified in the paper by computing exact
+  lattice minima for every `p ≡ 1 (mod 12)` below `7·10⁴`.
 * **The noise primitives are a model**: `add`, `ptct`, `mulRaw`, `aut`, `modSwitch` are
-  *definitions* returning the worst-case bounds (13)–(17), not theorems about RLWE
+  *definitions* returning the worst-case bounds (13)--(17), not theorems about RLWE
   ciphertexts; the reduction from BGV ciphertexts to these inequalities, the linear
-  transforms of Steps 1 and 4, the overflow bounds of Steps 2–3 and the HElib
+  transforms of Steps 1 and 4, the overflow bounds of Steps 2--3 and the HElib
   modulus-chain construction are not modelled.  The level/operation counts, the phase
-  table (round 5) and the decryption criterion are proved *inside* the model.
-* **Norm criterion, what remains**: only the Hensel lift of the criterion from `F_p` to
-  the Galois ring `GR(p^e, d)` (`e > 1`).  Everything over `F_p` is now proved
-  (`NormCriterion.normForm_iff_galoisField`: `∏ hᵢ^{μᵢ}` is a norm form over `F_{p^d}`
-  ⟺ `∀ i, d ∣ mᵢ μᵢ`, with `t = gcd(mᵢ, d)` conjugates of degree `mᵢ/t` per factor).
+  table and the decryption criterion are proved *inside* the model.
+* **The Galois ring `GR(p^e, d)` is not constructed.**  The norm criterion over `F_p` is
+  complete (`NormCriterion.normForm_iff_galoisField`), and its Hensel lift to `e > 1` is
+  complete (`Hensel.lean`), but the latter is stated for an arbitrary commutative ring `S`
+  with a ring automorphism `σ` and a `σ`-stable nilpotent ideal `J` — the defining properties
+  of `GR(p^e, d)` with `J = (p)`, `σ = Frob`, `S/J = F_{p^d}` — rather than for a constructed
+  `GR(p^e, d)` with a constructed Frobenius.  Mathlib has no Galois rings.
 
-Closed in earlier rounds (kept for the record): uniqueness of interpolation (round 3),
-existence of radices (round 3; the count `φ(r)` of order-`r` elements is not stated),
-admissible radix orders (round 4), the second equivalence of the lattice minimum
-(round 4), the term count generically attained (round 4), the repair of the obstruction
-(round 3) with the explicit example `F = Orb₃(Y − α)` over `F₃₁` (round 4), commutation
-and bigrading (round 3; the idempotent part is stated over a field), the cost corner
-table and the Paterson–Stockmeyer counts (rounds 3–4).  Closed in round 5: the lattice
-upper bounds `λ₁ ≤ √p` (box) and `λ₁ ≤ (2/√3)√p` (hexagon), the derived identity
-`deg Γ₁ = n − B` in the repair bookkeeping, the multiplicative-depth column of the phase
-table, and the general multiplicity form of the norm criterion (necessity for
-non-squarefree `F`, sufficiency for `d ∤ m_h`, `t = gcd(m_h, d)`).
+Closed in earlier rounds (kept for the record): uniqueness of interpolation, existence of
+radices (the count `φ(r)` of order-`r` elements is not stated), admissible radix orders, the
+second equivalence of the lattice minimum, the term count generically attained, the repair of
+the obstruction with the explicit example `F = Orb₃(Y − α)` over `F₃₁`, commutation and
+bigrading (the idempotent part is stated over a field), the cost corner table and the
+Paterson--Stockmeyer counts, the two-sided lattice bounds `λ₁ ≤ √p` (box) and
+`λ₁ ≤ (2/√3)√p` (hexagon), the derived identity `deg Γ₁ = n − B`, the multiplicative-depth
+column of the phase table, and the general multiplicity form of the norm criterion over `F_p`.
+Closed here: the Hensel lift of the norm criterion to `GR(p^e, d)` (`Hensel.lean`), the
+Latimer--MacDuffee uniqueness of the intertwiner up to `GL₂(ℤ)`-conjugacy in the rank-two case
+actually used (`Conjugacy.lean`), the box-closure constant `12` on the sufficient side
+(`Closure.lean`), and the deterministic part of the monodromy theorem together with the
+isolation of the Chebotarev input (`Monodromy.lean`).
 
 Minor weakenings that remain: the idempotents of `Commute.lean` are stated over a field
 (`ZMod p`), not over `GR(p^e, d)` with `e > 1`; the `O(1)` limit `ρ → 4` is replaced by the
