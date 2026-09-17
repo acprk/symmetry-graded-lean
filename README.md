@@ -2,8 +2,8 @@
 ### *Symmetry-Graded Digit Extraction for Faster BGV/BFV Bootstrapping*
 
 This directory contains a **Lean 4 + Mathlib** formalization of the algebraic core
-of the paper; the order-four filter of prior work is included as the `r = 4`
-instance.  Every result below is proved with **zero `sorry`, zero `admit`, zero user
+of the paper; the order-four filter of Xiong et al. (ASIACRYPT'26, eprint 2026/1847) is
+included as the `r = 4` instance.  Every result below is proved with **zero `sorry`, zero `admit`, zero user
 axioms**; `lake build` completes with no errors, and `#print axioms` on every main
 theorem reports only the three standard Lean axioms `propext`, `Classical.choice`, `Quot.sound`.
 
@@ -24,9 +24,9 @@ kernel up.
 
 | file | contents |
 |---|---|
-| `SymmetryGraded/OrderFour.lean` | (inherited, `r = 4`) order-four element, support stability, the character filter, the **Order-Four Character Filter** theorem, factored form |
-| `SymmetryGraded/Character.lean` | (inherited) **Isotypic decomposition** and **Monomial Support Constraint** at the coefficient level |
-| `SymmetryGraded/Tightness.lean` | (inherited, `r = 4`) tight term count, box injectivity, asymptotic cost ratio |
+| `SymmetryGraded/OrderFour.lean` | (order-four case, following Xiong et al.) order-four element, support stability, the character filter, the **Order-Four Character Filter** theorem, factored form |
+| `SymmetryGraded/Character.lean` | (general order-`r` form, following Xiong et al.) **Isotypic decomposition** and **Monomial Support Constraint** at the coefficient level |
+| `SymmetryGraded/Tightness.lean` | (order-four case, following Xiong et al.) tight term count, box injectivity, asymptotic cost ratio |
 | `SymmetryGraded/OrderR.lean` | **unified order-`r` filter**: `Aᵏ − A⁻¹ = 0 ↔ k ≡ r−1`, covariance ⟹ support `{1} ∪ {k ≡ r−1 (mod r)}`, `c₁ = 1/(1−A²)`, **factored form** `P = c₁X + X^{r−1}Q(X^r)` with a genuine polynomial `Q`, isotypic support, the `r = 4` instance check |
 | `SymmetryGraded/OrderSix.lean` | the **order-six instance**: `A² = A−1 ⟹ A³ = −1, A⁶ = 1`, hexagon norm invariance, `M₆`/`M₄` matrix orders, the **Order-six character filter** theorem (coefficient and polynomial form), factored form, oddness, term count, the `r = 6` instance check |
 | `SymmetryGraded/Lattice.lean` | the digit lattice: intertwining `φ_A ∘ M_A = A·φ_A`, **injectivity criterion** (kernel form and the sufficient condition `2B < |A|`, `2B(|A|+1) < p`), box/hexagon/closure regions and their stability, **cardinalities** `(2B+1)²`, `3B²+3B+1`, `6B²+6B+1` symbolically in `B` |
