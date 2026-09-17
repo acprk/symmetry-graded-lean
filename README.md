@@ -50,6 +50,13 @@ kernel up.
 | `SymmetryGraded/Conjugacy.lean` | **rank-two Latimer–MacDuffee**: every integral binary quadratic form of discriminant `−4 ≤ D < 0` represents `±1` (explicit reduction, replacing class number one for `ℤ[i]`, `ℤ[ω]`); `M² = τ·M − I` with `τ² < 4` forces `tr M = τ`, `det M = 1`, and makes `M` `GL₂(ℤ)`-conjugate to the companion matrix; any two such matrices are conjugate; the instances `M² = −I` (`r = 4`), `M² = M − I` (`r = 6`) and the conjugacy of every finite-order rotation to `M_A` |
 | `SymmetryGraded/Monodromy.lean` | **the deterministic part of the monodromy theorem and the isolated Chebotarev input**: the pencil `F_c = Γ + cQ` (monic of constant degree `n'`), (H1) ⟹ no fixed divisor and pairwise coprimality of distinct members, (H1) ⟹ `Γ + uQ` irreducible over `F_p(u)` (via `Polynomial.Bivariate.swap` and Gauss's lemma), (H1)–(H4) as a `structure Hyp` with the discriminant supplied as data, the branch locus of size `≤ 2n' − 2` and squarefreeness off it, the density constant `Π_d(n')` as a proportion of permutations with all cycle lengths divisible by `d` and `Π_d(n') > 0` for `d ∣ n'`, and the Chebotarev bound as a `structure ChebotarevBound` (an explicit hypothesis, never an axiom) from which existence of a norm form in the pencil is derived |
 | `SymmetryGraded/Hensel.lean` | **the Hensel lift of the norm criterion to the Galois ring `GR(p^e, d)`, `e > 1`**: lifting of a coprime factorisation modulo a nilpotent ideal (a Newton iteration; Mathlib's `Henselian.lean` lifts only roots), the linear case via Mathlib's Newton/Hensel root lifting together with pairwise-coprime conjugate roots, and the **orbit form**: if `F` is monic with base-ring coefficients and `F ≡ Orb_d(C₀)` modulo the nilpotent ideal with the `d` conjugates of `C₀` pairwise coprime, then `C₀` lifts to a monic `C` with `F = Orb_d(C)` exactly |
+| `SymmetryGraded/Isotypic.lean` | **the isotypic decomposition on the quotient** `V = K[X]/(G_S)`: `char K ∤ r` derived from the exact-order hypothesis (so the idempotent identities of `Commute.lean` need no separate characteristic assumption), descent of `σ_A` and of the idempotents `π_j` to `V`, `V_j = π_j(V)` equal to the `A^j`-eigenspace `{f : σ_A f = A^j f}`, `X^k ∈ V_{k mod r}`, `V = ⊕_{j<r} V_j` as an internal direct sum of `K`-submodules, `V_j = span{X^k : k < |S|, k ≡ j (mod r)}` and `dim V_j = ⌈(|S| − j)/r⌉`; stability of `V_j` under any additive endomorphism commuting with `σ_A` and with the coefficients `A^{−jℓ}/r` of `π_j` — the `Frob`-stability half of the bigraded decomposition, stated for an abstract such endomorphism because `GR(p^e, d)` is not constructed |
+| `SymmetryGraded/Stability.lean` | the two region-symmetry statements: **oddness** for an arbitrary half-turn-stable region and an arbitrary `B`-injective radix (`P(−X) = −P(X)` by uniqueness of the interpolant, all even coefficients vanish, at most `|S_A|/2` nonzero terms, which is the paper's `(|S_A| − 1)/2` for `|S_A|` odd), and the **box half of the classification of admissible orders by stable region**: `[−B,B]²`, `B ≥ 1`, is `M_A`-stable iff `τ = 0`, i.e. iff `A² = −1`, i.e. iff the exact order is four, with the degenerate `A² = 1` realised by `±I` |
+| `SymmetryGraded/Selection.lean` | **absence of the obstruction for `r ≥ 3`**: `Q(x^r) ≠ 0` for every nonzero `x ∈ S_A` from the factored form and the swap symmetry of the region, hence `gcd(Q, Γ) = 1` for the vanishing polynomial of the folded support padded off the roots of `Q`; consequently the hypothesis (H1) of `Monodromy.Hyp` is **proved rather than assumed** — `hyp_h1` supplies the field `h1`, `hyp` assembles a `Monodromy.Hyp` from the geometric data and (H2)–(H4) alone, and `monodromy_of_selection` reads off pairwise coprimality of the pencil, the branch-locus bound `2n' − 2` and squarefreeness off it |
+| `SymmetryGraded/NormSchedule.lean` | **cost of the norm map for an arbitrary slot degree `d`**: a binary schedule (halve at even `d`, peel one factor at odd `d`) with a proof that its value is `Orb_d(x) = ∏_{i<d} φⁱ(x)` for every `d`, that its product count equals its automorphism count, and that both are `≤ 2⌈log₂ d⌉`; this extends `Doubling.lean`, which covers `d = 2^ℓ` only |
+| `SymmetryGraded/Coverage.lean` | **coverage and the closed-form selector**: box-injective `⟹ 4B² < p ⟹` hexagon-injective, so order six is feasible wherever order four is, in dichotomy and threshold form, and in the box-closure form at `12B²`; for `p ≡ 7 (mod 12)` no order-four radix exists at all while orders `2, 3, 6` do; the argmax-with-tie-break selector on a nonempty finite set of orders, and, through `Unify.gcost_antitone`, `r⋆ = 6` as the cost minimiser over `{2, 3, 6}`; the effective orders `ρ = 6` on the hexagon and `4 < ρ ≤ 6` on the box closure |
+| `SymmetryGraded/NonAbelian.lean` | **no non-abelian gain**: a `K`-algebra endomorphism of `K[X]` for which the monomial basis is a simultaneous eigenbasis is exactly a scalar substitution `σ_c`; `Stab^×(S) ≤ Kˣ` is a subgroup, finite as soon as `S` meets `K^×`, hence cyclic, and its elements make `σ_c` descend to `V`; a scalar whose action on the encoded digit lattice is induced by an integer `2 × 2` matrix of finite order has `orderOf c ∈ {1,2,3,4,6}`, hence `≤ 6`; and a one-dimensional character of any group containing `M, κ` with `κMκ⁻¹ = M⁻¹` satisfies `χ(M)² = 1`, so it never sees a primitive third or sixth root of unity, with `M² = ⁅M, κ⁆ ∈ [G,G]` and the hexagon's order-six rotation / reflection pair as an explicit witness |
+| `SymmetryGraded/CosetObstruction.lean` | the final assembly of the **obstruction for the direct coset at `r = 2`**: each root `a` of the fixed divisor at which `Γ₁(a) ≠ 0` pins the coset scalar to `c = −Q₁(a)/Γ₁(a)` whenever `Q + cΓ` is an orbit product of length `d ≥ 2`, so two roots with distinct values leave no admissible `c` and the direct coset contains no norm form at any `d ≥ 2` |
 
 ## Modelling conventions
 
@@ -583,6 +590,35 @@ Two layers.  Abstract: `K, L` fields, `[Algebra K L] [FiniteDimensional K L] [Is
   computed; the density corollary takes a `ChebotarevBound` and the largeness hypothesis
   `err·√p < Π_d(n')·p`; the bridge to the norm criterion takes the factorisation of the member
   into pairwise distinct monic irreducibles as a hypothesis.
+* Isotypic decomposition on the quotient (`Isotypic`): `[Field K] [DecidableEq K]`, `IsUnit A`
+  and `S.image (A * ·) = S` for the descent, `A ^ r = 1` with `∀ j, 0 < j → j < r → A ^ j ≠ 1`
+  and `1 ≤ r` for everything else — the characteristic hypothesis `(r : K) ≠ 0` is *derived*
+  (`natCast_ne_zero_of_exact_order`), not assumed; `j < r` for the fixed-point description,
+  the span and the dimension.  The stability statements take an additive endomorphism together
+  with the two commutation hypotheses (with `σ_A`, and with multiplication by `(r : K)⁻¹·A^{−jℓ}`).
+* Region symmetries (`Stability`): oddness needs `∀ v ∈ T, −v ∈ T`, `Set.InjOn (phi A) T`,
+  `P.degree < |T|` and interpolation on `T`; the coefficient and term-count statements
+  additionally need `(2 : K) ≠ 0`.  Box stability needs `1 ≤ B`; `box_stable_order_four`
+  additionally `A ^ 2 = τA − 1`, `A ^ r = 1` with exact order and `3 ≤ r`.
+* Selection (`Selection`): `A ^ r = 1` with exact order, `3 ≤ r`, `∀ v ∈ T, (v.2, v.1) ∈ T`,
+  `(0,0) ∈ T`, `Set.InjOn (phi A) T`, the factored form `P = c₁X + X^{r−1}Q(X^r)` (or, in the
+  `_interp` variants, `M_A`-stability, `2 ≤ |T|` and `P.degree < |T|`, from which
+  `Interpolation.order_r_factored` produces it), and `Q(z) ≠ 0` at the pad points.  `hyp` and
+  `monodromy_of_selection` additionally take (H2)–(H4) of `Monodromy.Hyp`; (H1) and `Γ.Monic`
+  are proved.
+* Norm schedule (`NormSchedule`): `[CommRing R]`, `φ` any ring endomorphism, no hypothesis for
+  correctness; `1 ≤ d` for the cost bound.
+* Coverage (`Coverage`): `p` prime, `p ∣ A₄² + 1` resp. `p ∣ A₆² − A₆ + 1`, `0 ≤ B`; the
+  selector statements need a nonempty `Finset` of orders, `0 < D`, `d = 1 ∨ 2 ≤ d` and
+  positivity of the orders; the mod-12 statements need `[Fact p.Prime]` and `p % 12 = 7`.
+* No non-abelian gain (`NonAbelian`): `[Field K]` for the diagonal and stabilizer parts,
+  `[DecidableEq K]` for the stabilizer; finiteness of `Stab^×(S)` needs a nonzero `s₀ ∈ S`;
+  the ceiling needs `M ^ n = 1` with `1 ≤ n` and the pointwise intertwining
+  `∀ v, phi A (matAct M v) = c · phi A v`; part (2) needs only the dihedral relation
+  `κMκ⁻¹ = M⁻¹` in a group and a homomorphism to a commutative group.
+* Coset obstruction (`CosetObstruction`): `[Field K] [DecidableEq K]`, `π` a ring endomorphism
+  of `K[X]` fixing `X − C a`, `π ^ d = 1`, `2 ≤ d`, `Q = gQ₁`, `Γ = gΓ₁` with
+  `g = ∏_{y ∈ W}(X − y)`, `a ∈ W`, `Γ₁(a) ≠ 0`, and `Q + cΓ ≠ 0`.
 
 ## Not formalized / weakened
 
@@ -632,15 +668,35 @@ bigrading (the idempotent part is stated over a field), the cost corner table an
 Paterson--Stockmeyer counts, the two-sided lattice bounds `λ₁ ≤ √p` (box) and
 `λ₁ ≤ (2/√3)√p` (hexagon), the derived identity `deg Γ₁ = n − B`, the multiplicative-depth
 column of the phase table, and the general multiplicity form of the norm criterion over `F_p`.
-Closed here: the Hensel lift of the norm criterion to `GR(p^e, d)` (`Hensel.lean`), the
+Closed earlier: the Hensel lift of the norm criterion to `GR(p^e, d)` (`Hensel.lean`), the
 Latimer--MacDuffee uniqueness of the intertwiner up to `GL₂(ℤ)`-conjugacy in the rank-two case
 actually used (`Conjugacy.lean`), the box-closure constant `12` on the sufficient side
 (`Closure.lean`), and the deterministic part of the monodromy theorem together with the
 isolation of the Chebotarev input (`Monodromy.lean`).
 
-Minor weakenings that remain: the idempotents of `Commute.lean` are stated over a field
-(`ZMod p`), not over `GR(p^e, d)` with `e > 1`; the `O(1)` limit `ρ → 4` is replaced by the
-exact value `4 + 2/(6B²+6B+1)`; orbit doubling is modelled for the power-of-two schedule.
+Closed here: the isotypic decomposition on the quotient `V = K[X]/(G_S)` itself, with the
+dimension count and the `Frob`-stability half of the bigraded decomposition (`Isotypic.lean`);
+oddness for a general `B`-injective radix and the box half of the classification of admissible
+orders by stable region (`Stability.lean`); the absence of the obstruction for `r ≥ 3`, which
+turns (H1) of the monodromy hypotheses from an assumption into a theorem (`Selection.lean`);
+the cost of the norm map for an arbitrary slot degree (`NormSchedule.lean`); the coverage
+corollary and the closed-form selector (`Coverage.lean`); the no-non-abelian-gain proposition
+(`NonAbelian.lean`); and the final assembly of the direct-coset obstruction at `r = 2`
+(`CosetObstruction.lean`).
+
+Minor weakenings that remain: the idempotents of `Commute.lean` and their descent in
+`Isotypic.lean` are stated over a field (`ZMod p`), not over `GR(p^e, d)` with `e > 1`, so the
+stability of the components is proved for an abstract endomorphism with the two properties the
+paper uses of `Frob` rather than for a constructed Frobenius; the `O(1)` limit `ρ → 4` is
+replaced by the exact value `4 + 2/(6B²+6B+1)` and by the two-sided bound `4 < ρ ≤ 6`; of the
+paper's coverage band `4B² ≲ p ≲ 8B²` only the rigorous part is proved, namely the two
+implications at the threshold `4B²` (the band itself is the gap between the necessary constant
+`4` and the sufficient constant `8` of the box, inside which feasibility depends on the
+instance); the general-`d` norm schedule of `NormSchedule.lean` is the halve/peel recursion
+rather than the paper's literal block decomposition `d = Σ_j 2^{b_j}`, with the same bound
+`2⌈log₂ d⌉`; and part (1) of the no-non-abelian-gain proposition is proved for the
+monomial-diagonal family the paper's mechanism uses — as the paper itself states it — with
+`D₆^ab ≅ C₂ × C₂` not identified as an isomorphism of groups, only its consequence `χ(M)² = 1`.
 
 ## Notes
 
